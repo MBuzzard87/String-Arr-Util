@@ -1,5 +1,9 @@
 package com.zipcodewilmington;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Created by leon on 1/29/18.
  */
@@ -9,8 +13,10 @@ public class StringArrayUtils {
      * @return first element of specified array
      */ // TODO
     public static String getFirstElement(String[] array) {
-
-        return array[0];
+        if (array.length > 0) {
+            return array[0];
+        }
+        return null;
     }
 
     /**
@@ -18,7 +24,10 @@ public class StringArrayUtils {
      * @return second element in specified array
      */
     public static String getSecondElement(String[] array) {
-        return array[1];
+        if (array.length > 1){
+            return array[1];
+        }
+        return null;
     }
 
     /**
@@ -26,7 +35,11 @@ public class StringArrayUtils {
      * @return last element in specified array
      */ // TODO
     public static String getLastElement(String[] array) {
-        return array[array.length - 1];
+        if (array.length > 0) {
+            return array[array.length - 1];
+        }
+
+        return null;
     }
 
     /**
@@ -34,7 +47,10 @@ public class StringArrayUtils {
      * @return second to last element in specified array
      */ // TODO
     public static String getSecondToLastElement(String[] array) {
-        return array[array.length - 2];
+        if(array.length > 1) {
+            return array[array.length - 2];
+        }
+         return null;
     }
 
     /**
@@ -44,24 +60,12 @@ public class StringArrayUtils {
      */ // TODO
     public static boolean contains(String[] array, String value) {
 
-        Integer tValue = 0;
-        Boolean expected = true;
-
-        for (int i = 0; i < array.length; i++) {
-            if (array[i].equals(value)) {
-                tValue += 1;
-            } else {
-                tValue += 0;
+        for (String str : array) {
+            if(str.equals(value)) {
+                return true;
             }
         }
-
-        if (tValue > 0) {
-            expected = true;
-        } else {
-            expected = false;
-        }
-
-        return expected;
+        return false;
     }
 
     /**
@@ -71,11 +75,11 @@ public class StringArrayUtils {
 
     public static String[] reverse(String[] array) {
 
-        Integer revIt = 0;
+        int revInt = array.length - 1;
         String[] revArr = new String[array.length];
-        for (int i = array.length - 1; i >= 0; i--) {
-            revArr[revIt] = array[i];
-            revIt++;
+        for (int i = 0; i < array.length; i++) {
+            revArr[revInt] = array[i];
+            revInt--;
         }
 
         return revArr;
@@ -87,20 +91,19 @@ public class StringArrayUtils {
      */ // TODO
     public static boolean isPalindromic(String[] array) {
 
-        Integer palin = 0;
+        boolean isPalindrome = true;
 
-        for (int i = 0; i <= array.length / 2 && array.length != 0; i++) {
-            if (array[i] != array[array.length - i - 1]) {
-                palin = 1;
+        int palin = array.length - 1;
+
+        for (String str : array) {
+            if (!str.equals(array[palin])) {
+                isPalindrome = false;
                 break;
             }
+            palin--;
         }
 
-        if (palin == 1) {
-            return false;
-        }else {
-            return true;
-        }
+        return isPalindrome;
 
     }
 
@@ -111,26 +114,18 @@ public class StringArrayUtils {
      */ // TODO
     public static boolean isPangramic(String[] array) {
 
-
-        boolean panTrueFalse = false;
-        Integer panCount = 0;
-        String joined2 = String.join("", array).toLowerCase();
+        boolean pangramic = true;
+        String joinStr = String.join("", array).toLowerCase();
         String[] alphabet = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"};
 
-        for (String alphaNew : alphabet)
-            if (joined2.contains(alphaNew)) {
-
-            } else {
-                panCount += 1;
+        for (String letter : alphabet) {
+            if(!joinStr.contains(letter)) {
+                pangramic = false;
+                break;
             }
-
-        if (panCount > 0) {
-            panTrueFalse = false;
-        } else {
-            panTrueFalse = true;
         }
 
-        return panTrueFalse;
+        return pangramic;
     }
 
 
@@ -143,16 +138,13 @@ public class StringArrayUtils {
      */ // TODO
     public static int getNumberOfOccurrences(String[] array, String value) {
 
-        Integer iterateOccur = 0;
-
-            for (int i = 0; i < array.length; i++) {
-                if (value.equals(array[i])) {
-                    iterateOccur += 1;
-                } else {
-                    iterateOccur += 0;
-                }
+        int numOccur = 0;
+        for (String str : array) {
+            if(str.equals(value)) {
+                numOccur++;
             }
-        return iterateOccur;
+        }
+        return numOccur;
     }
 
     /**
@@ -161,19 +153,15 @@ public class StringArrayUtils {
      * @return array with identical contents excluding values of `value`
      */ // TODO
     public static String[] removeValue(String[] array, String valueToRemove) {
+        StringBuilder updatedStr = new StringBuilder();
 
-        String[] removeArr = new String[array.length - 1];
-        Integer remVal = 0;
-
-        for (int i = 0; i < array.length; i++) {
-            if (valueToRemove.equals(array[i])) {
-
-            } else {
-                removeArr[remVal] = array[i];
-                remVal++;
+        for(String str : array) {
+            if(!str.equals(valueToRemove)) {
+                updatedStr.append(str).append(" ");
             }
         }
-        return removeArr;
+
+        return updatedStr.toString().split(" ");
     }
 
     /**
@@ -182,17 +170,15 @@ public class StringArrayUtils {
      */ // TODO
     public static String[] removeConsecutiveDuplicates(String[] array) {
 
-        String remStr = "";
+        StringBuilder remStr = new StringBuilder();
 
         for (int i = 0; i < array.length; i++) {
             if (i == 0 || !array[i].equals(array[i - 1])) {
-                remStr += array[i] + " ";
+                remStr.append(array[i]).append(" ");
             }
         }
 
-        String[] remArr = remStr.split(" ");
-
-        return remArr;
+        return remStr.toString().split(" ");
     }
     //
 
@@ -202,20 +188,18 @@ public class StringArrayUtils {
      */ // TODO
     public static String[] packConsecutiveDuplicates(String[] array) {
 
-        String packStr = "";
+        StringBuilder packStr = new StringBuilder();
+        packStr.append(array[0]);
 
-        for (int i = 0; i < array.length; i++) {
-            if (i == 0) {
-                packStr += array[i];
-            } else if (array[i] == array[i - 1]) {
-                packStr += array[i];
+        for (int i = 1; i < array.length; i++) {
+            if (array[i].equals(array[i - 1])) {
+                packStr.append(array[i]);
             } else {
-                packStr += " " + array[i];
+                packStr.append(" ").append(array[i]);
             }
         }
 
-        String[] packArr = packStr.split(" ");
 
-        return packArr;
+        return packStr.toString().split(" ");
     }
 }
